@@ -1,8 +1,8 @@
 'use strict';
 const ENV = process.env.NODE_ENV || 'development';
 const winston = require('winston');
-const transports = require('./environments/'+ENV.toLowerCase())(winston);
-var logger;
+const transports = require(`./environments/${ENV.toLowerCase()}`)(winston);
+let logger;
 
 module.exports.init = init;
 module.exports.logger = getLogger;
@@ -26,7 +26,7 @@ function getLogger() {
 
 function getStream() {
   return {
-    write: function(message, encoding){
+    write: function(message, encoding) {
       logger.info(message);
     }
   }

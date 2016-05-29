@@ -8,8 +8,14 @@ const express = require('express');
 const config = require('./config');
 const app = express();
 const logger = require('./config/winston').init(app);
+const Core = require('./core');
+const Auth = require('./apps/auth');
+const Shared = require('./apps/shared');
+const Api = require('./apps/api');
+const Admin = require('./apps/admin');
+const Frontstore = require('./apps/frontstore');
 
-var server;
+let server;
 
 /**
  * Set express (app) variables
@@ -19,14 +25,16 @@ app.set('root', __dirname);
 app.set('env', ENV);
 
 require('./config/mongoose').init(app);
-require('./config/models').init(app);
+let core = new Core();
+
 require('./config/passport').init(app);
 require('./config/express').init(app);
-require('./config/routes').init(app);
 
-app.get('/api/status', (req, res, next) => {
-  res.json({ message: 'API is running.' });
-});
+let auth = new Auth(config, core, app);
+let shared = new Shared(config, core, app);
+let api = new Api(config, core, app);
+let admin = new Admin(config, core, app);
+let frontstore = new Frontstore(config, core, app);
 
 app.use((err, req, res, next) => {
   logger.error(err);
@@ -40,13 +48,6 @@ if (!module.parent) {
   server = http.createServer(app);
   server.listen(config.port || 3000, config.hostname, () => {
     let addr = server.address();
-    // console.info('---');
-    // console.info('%s is running.', config.app.name);
-    // console.info('Hostname: %s', addr.address);
-    // console.info('Port: %s', addr.port);
-    // console.info('Environment: %s', ENV.toLowerCase());
-    // console.info('Access: %s', config.baseUrl);
-    //console.info('---');
     logger.info('Server is running', {
       app: config.app.name,
       hostname: addr.address,

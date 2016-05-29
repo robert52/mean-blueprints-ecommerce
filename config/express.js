@@ -8,8 +8,9 @@ const session = require('express-session');
 const passport = require('passport');
 const MongoStore = require('connect-mongo')(session);
 const morgan = require('morgan');
+const nunjucks = require('nunjucks');
 const config = require('./index');
-const Logger = require('./winston')
+const Logger = require('./winston');
 const logger = Logger.logger();
 
 module.exports.init = initExpress;
@@ -29,6 +30,9 @@ function initExpress(app) {
   if (config.proxy.trust) {
     app.enable('trust proxy');
   }
+
+  app.set('view engine', 'html');
+  app.engine('html', nunjucks.render);
 
   app.use(expressValidator());
   app.use(bodyParser.urlencoded({ extended: true }));

@@ -5,10 +5,10 @@ module.exports = {
   hostname: '127.0.0.1',
   baseUrl: 'http://localhost:3000',
   mongodb: {
-    uri: 'mongodb://localhost/es_dev_db'
+    uri: 'mongodb://localhost/ecom_dev_db'
   },
   app: {
-    name: 'Express API server'
+    name: 'MEAN Blueprints - ecommerce'
   },
   serveStatic: true,
   session: {
@@ -20,7 +20,8 @@ module.exports = {
   proxy: {
     trust: true
   },
-  swig: {
-    cache: false
+  nunjucks: {
+    cache: false,
+    watch: true
   },
 };

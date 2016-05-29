@@ -1,9 +1,9 @@
 'use strict';
 
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 
 module.exports = buildLocalStrategy;
 
@@ -12,7 +12,7 @@ function buildLocalStrategy() {
     usernameField: 'email',
     passwordField: 'password'
   }, function(email, password, done) {
-    User.authenticate(email, password, function(err, user) {
+    User.authenticate(email, password, (err, user) => {
       if (err) {
         return done(err);
       }
